@@ -29,20 +29,21 @@ async def start(client, message):
    if message.chat.type == 'private':
        await Jebot.send_message(
                chat_id=message.chat.id,
-               text="""<b>Hey There, I'm AnyDL Bot
+               text="""<b>درود
+               بات دانلودر چنل NLM هستم و براتون میتونم از یوتیوب فایل دانلود کنم
 
-I can download video or audio from Youtube, Pornhub and Xhamster. Made by @JEBotZ.
 
-Hit help button to find out more about how to use me</b>""",   
+
+میتونید با استفاده help راهنمایی بات رو دریافت کنید</b>""",   
                             reply_markup=InlineKeyboardMarkup(
                                 [[
                                         InlineKeyboardButton(
                                             "Help", callback_data="help"),
                                         InlineKeyboardButton(
-                                            "Channel", url="https://t.me/Infinity_BOTs")
+                                            "Creator's Channel", url="https://t.me/the_aryana_py")
                                     ],[
                                       InlineKeyboardButton(
-                                            "Source Code", url="https://github.com/ImJanindu/AnyDL-Bot")
+                                            "Channel", url="https://github.com/ImJanindu/AnyDL-Bot")
                                     ]]
                             ),        
             disable_web_page_preview=True,        
@@ -53,53 +54,31 @@ async def help(client, message):
     if message.chat.type == 'private':   
         await Jebot.send_message(
                chat_id=message.chat.id,
-               text="""<b>AnyDL Bot Help!
+               text="""<b>
 
-Just send a Youtube, Pornhub or Xhamster video url to download it in video or audio format!
+فقط کافیه فایل رو ارسال کنید!
 
 Join @Infinity_BOTs</b>""",
         reply_markup=InlineKeyboardMarkup(
                                 [[
                                         InlineKeyboardButton(
-                                            "Back", callback_data="start"),
-                                        InlineKeyboardButton(
-                                            "About", callback_data="about"),
-                                  ],[
-                                        InlineKeyboardButton(
-                                            "Source Code", url="https://github.com/ImJanindu/AnyDL-Bot")
-                                    ]]
+                                            "Back", callback_data="start")
+                                  ]
                             ),        
             disable_web_page_preview=True,        
             parse_mode="html")
-
-@Jebot.on_message(filters.command("about"))
-async def about(client, message):
-    if message.chat.type == 'private':   
-        await Jebot.send_message(
-               chat_id=message.chat.id,
-               text="""<b>About AnyDL Bot!</b>
-
-<b>♞ Developer:</b> <a href="https://t.me/ImJanindu">Jason</a>
-
-<b>♞ Support:</b> <a href="https://t.me/InfinityBOTs_Support">Infinity BOTs Support</a>
-
-<b>♞ Library:</b> <a href="https://github.com/pyrogram/pyrogram">Pyrogram</a>
-
-<b>Join @Infinity_BOTs</b>""",
+                                   
      reply_markup=InlineKeyboardMarkup(
                                 [[
                                         InlineKeyboardButton(
                                             "Back", callback_data="help"),
-                                        InlineKeyboardButton(
-                                            "Source Code", url="https://github.com/ImJanindu/AnyDL-Bot")
                                     ]]
                             ),        
             disable_web_page_preview=True,        
             parse_mode="html")
 
 
-# https://docs.pyrogram.org/start/examples/bot_keyboards
-# Reply with inline keyboard
+                                   
 @Jebot.on_message(filters.private
                    & filters.text
                    & ~filters.edited
@@ -143,10 +122,6 @@ async def ytdl_with_button(c: Client, message: Message):
             [
                 [
                     InlineKeyboardButton(
-                        "Audio 🎵",
-                        callback_data="ytdl_audio"
-                    ),
-                    InlineKeyboardButton(
                         "Video 🎬",
                         callback_data="ytdl_video"
                     )
@@ -187,53 +162,6 @@ async def callback_query_ytdl_audio(_, callback_query):
     await callback_query.message.reply_to_message.delete()
     await callback_query.message.delete()
 
-
-if Config.AUDIO_THUMBNAIL == "No":
-   async def send_audio(message: Message, info_dict, audio_file):
-       basename = audio_file.rsplit(".", 1)[-2]
-       # .webm -> .weba
-       if info_dict['ext'] == 'webm':
-           audio_file_weba = basename + ".weba"
-           os.rename(audio_file, audio_file_weba)
-           audio_file = audio_file_weba
-       # thumbnail
-       thumbnail_url = info_dict['thumbnail']
-       thumbnail_file = basename + "." + \
-           get_file_extension_from_url(thumbnail_url)
-       # info (s2tw)
-       webpage_url = info_dict['webpage_url']
-       title = s2tw(info_dict['title'])
-       caption = f"<b><a href=\"{webpage_url}\">{title}</a></b>"
-       duration = int(float(info_dict['duration']))
-       performer = s2tw(info_dict['uploader'])
-       await message.reply_audio(audio_file, caption=caption, duration=duration,
-                              performer=performer, title=title,
-                              parse_mode='HTML', thumb=thumbnail_file)
-       os.remove(audio_file)
-       os.remove(thumbnail_file)
-
-else:
-    async def send_audio(message: Message, info_dict, audio_file):
-       basename = audio_file.rsplit(".", 1)[-2]
-       # .webm -> .weba
-       if info_dict['ext'] == 'webm':
-           audio_file_weba = basename + ".weba"
-           os.rename(audio_file, audio_file_weba)
-           audio_file = audio_file_weba
-       # thumbnail
-       lol = Config.AUDIO_THUMBNAIL
-       thumbnail_file = wget.download(lol)
-       # info (s2tw)
-       webpage_url = info_dict['webpage_url']
-       title = s2tw(info_dict['title'])
-       caption = f"<b><a href=\"{webpage_url}\">{title}</a></b>"
-       duration = int(float(info_dict['duration']))
-       performer = s2tw(info_dict['uploader'])
-       await message.reply_audio(audio_file, caption=caption, duration=duration,
-                              performer=performer, title=title,
-                              parse_mode='HTML', thumb=thumbnail_file)
-       os.remove(audio_file)
-       os.remove(thumbnail_file)
 
 @Jebot.on_callback_query(filters.regex("^ytdl_video$"))
 async def callback_query_ytdl_video(_, callback_query):
@@ -352,7 +280,7 @@ async def button(bot, update):
 print(
     """
 Bot Started!
-Join @Infinity_BOTs
+Join @tha_aryana_py
 """
 )
 
